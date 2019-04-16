@@ -12,6 +12,11 @@ function createButtons() {
     }
 }
 
+// Generic function for capturing the movie name from the data-attribute
+function imageState() {
+  var imageState = $(this).attr("data-state");
+  return imageState;
+}
  
 $(document).ready(function(){
 
@@ -29,8 +34,8 @@ $(document).ready(function(){
             var results = response.data;
             console.log(results);
             for (var i = 0; i < results.length; i++) {
-                var col = $("<div class='col-12 col-sm-6 col-lg-3'>");
-                var animalDiv = $("<div class='card mb-2'>");
+                var col = $("<div class='col-12 col-md-6 col-lg-3'>");
+                var animalDiv = $("<div class='card mb-2 shadow' style='height:280px;'>");
                 var cardBody = $("<div class='card-body'>");
 
                 var rating = results[i].rating;
@@ -40,13 +45,17 @@ $(document).ready(function(){
                 // var cardTitle = $("<h6 class='card-text'>");
                 //     cardTitle.text("Title: " + title);
 
-                var animalImage = $("<img>").addClass(".gif .img-fluid");
-    
-                animalImage.attr("src", results[i].images.fixed_height.url);
-                animalImage.attr("data-still", results[i].images.fixed_height_still.url);
-                animalImage.attr("data-state", "still");
-                console.log(animalImage);
+                var animalImage = $("<img>").addClass("gif");
+                animalImage.addClass("img-fluid");
+
+                var still_image = results[i].images.fixed_height_still.url;
+                animalImage.attr("src", still_image);
                 
+                var animate_image = results[i].images.fixed_height.url;
+                animalImage.attr("data-animate", animate_image);
+
+                animalImage.attr("data-still", still_image);
+                animalImage.attr("data-state", "still");           
                 
                 animalDiv.append(animalImage);
                 animalDiv.append(cardBody);
@@ -54,29 +63,41 @@ $(document).ready(function(){
                 animalDiv.append(p1);
 
                 col.append(animalDiv);
-                
-
-                // var card = $("<div class='card'>")
-                //     card.append(animalDiv);
-                
+                             
                 $("#gifs-appear-here").prepend(col);
             }
     
         });
     });
 
-    $(".gif").on('click', function(){
+    $(document).on("click", ".gif", function(){
 
-        // var state = $(this).attr("data-state");
-        var state = $(this).attr("data-state");
-    
-          if (state === "still") {
+      var state = $(this).attr("data-state");
+      
+      
+      if (state === "still") {
             $(this).attr("src", $(this).attr("data-animate"));
             $(this).attr("data-state", "animate");
+           
           }
           else {
             $(this).attr("src", $(this).attr("data-still"));
             $(this).attr("data-state", "still");
           }
-    });
+     });
+
+    // $(".gif").on("click", function(){
+    //   alert("you clicked me");
+        // var state = $(this).attr("data-state");
+        // var state = $(this).attr("data-state");
+        
+        //   if (state === "still") {
+        //     $(this).attr("src", $(this).attr("data-animate"));
+        //     $(this).attr("data-state", "animate");
+        //   }
+        //   else {
+        //     $(this).attr("src", $(this).attr("data-still"));
+        //     $(this).attr("data-state", "still");
+        //   }
+    // });
 });
