@@ -32,20 +32,16 @@ function runQuery(queryURL) {
 
       
       for (var i = 0; i < results.length; i++) {
-          var col = $("<div class='col-12 col-md-6 col-lg-3'></div>");
-          var animalDiv = $("<div class='card mb-2 shadow' style='height:280px;'></div>");
-          var cardBody = $("<div class='card-body'></div>");
-
+          var col = $("<div class='col-12 col-md-6 col-lg-3' ></div>");
+          var animalDiv = $("<div class='card mb-2 shadow p-0 border-0' style='height:350px;'></div>");
+          var animalImage = $("<img >").addClass("gif m-0");
+          var cardBody = $("<div class='card-body py-0 align-text-bottom'></div>");
+          var title = results[i].title; 
+          var cardTitle = $("<div class='card-header text-normal bg-white text-uppercase'></div>").text(title);
           var rating = results[i].rating;
-          // var title = results[i].title;
-          var p1 = $("<p>").text("Rating: " + rating);
-
-          // var cardTitle = $("<h6 class='card-text'>");
-          //     cardTitle.text("Title: " + title);
-
-          var animalImage = $("<img>").addClass("gif");
+          var rate = $("<div class='card-footer h6 bg-white text-muted small mb-0'></div>").text("Rating: " + rating );
+  
           animalImage.addClass("img-fluid");
-
           var still_image = results[i].images.fixed_height_still.url;
           animalImage.attr("src", still_image);
           
@@ -53,13 +49,13 @@ function runQuery(queryURL) {
           animalImage.attr("data-animate", animate_image);
 
           animalImage.attr("data-still", still_image);
-          animalImage.attr("data-state", "still");           
-          
+          animalImage.attr("data-state", "still");   
+
           animalDiv.append(animalImage);
           animalDiv.append(cardBody);
-          // animalDiv.append(cardTitle);
-          animalDiv.append(p1);
-
+          animalDiv.append(cardTitle);     
+          animalDiv.append(rate);
+          
           col.append(animalDiv);
                        
           $("#gifs-appear-here").prepend(col);
@@ -70,10 +66,11 @@ function runQuery(queryURL) {
 }
  
 $(document).ready(function(){
+   
+      displayButtons();
+   
 
-    displayButtons();
-
-    $(".animal-btn").on("click", function() {
+    $("button").on("click", ".animal-btn", function() {
 
         // $("#gifs-appear-here").html("");
 
@@ -87,9 +84,11 @@ $(document).ready(function(){
 
     $("#add-animal").on("click", function(e) {
       e.preventDefault();
+      
       animal = $("input").val().trim();
       topics.push(animal);
       createButton(animal);  
+      $("#animalInput").val("");
     });
 
      
@@ -115,12 +114,12 @@ $(document).ready(function(){
 
       $(document.body).on("click", ".animal-btn", function(){
 
-          animal = $(this).attr("data-animal");
+            animal = $(this).attr("data-animal");
 
-          queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=4rNY8cQF4MKQel6lt8AVuDA97iMExb2n&limit=12";
+            queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=4rNY8cQF4MKQel6lt8AVuDA97iMExb2n&limit=12";
 
-          runQuery(queryURL);
-
+            runQuery(queryURL);
+         
       });
   
 
