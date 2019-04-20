@@ -2,6 +2,9 @@ var topics = ["dog", "cat", "rabbit", "hamster", "goldfish", "bird", "turtle", "
             "frog", "salamander", "crab", "chinchilla", "alligator", "snake", "falcon", 
             "eagle", "crocodile", "cow", "horse", "lion", "panther", "dolphin", "jaguar"];
 
+var favorites =[];
+var favCounter = 0;
+
 var results;
 var animal;
 var queryURL;
@@ -20,6 +23,12 @@ function createButton(animal) {
   $("#buttons").append(button.text(animal));
 }
 
+function createFavButton() {
+  var button = $("<button>");
+  button.addClass("btn btn-lg btn-outline-primary mr-1 py-1 favorite-btn");
+  button.text("Favorites");
+  $("#fav-button").append(button);
+}
 
 function runQuery(queryURL) {
 
@@ -32,7 +41,7 @@ function runQuery(queryURL) {
 
       
       for (var i = 0; i < results.length; i++) {
-          var col = $("<div class='col-12 col-md-6 col-lg-3' ></div>");
+          var col = $("<div class='col-12 col-md-6 col-lg-4 py-2' ></div>");
           var animalDiv = $("<div class='card mb-2 shadow p-0 border-0 text-center' style='height:350px;'></div>");
           var animalImage = $("<img>").addClass("card-img-top gif m-0");
           var cardBody = $("<div class='card-body py-0 align-text-bottom'></div>");
@@ -41,18 +50,18 @@ function runQuery(queryURL) {
           var rating = results[i].rating;
           var footer = $("<div class='card-footer bg-white text-muted small mb-0'></div>");
           var rowFooter = $("<div class='row'></div>");
-          var col1 = $("<div class='col-md-4'></div>");
-          var col2 = $("<div class='col-md-4'></div>");
-          var col3 = $("<div class='col-md-4'></div>");
+          var col1 = $("<div class='col-md-6'></div>");
+          var col2 = $("<div class='col-md-3'></div>");
+          var col3 = $("<div class='col-md-3'></div>");
 
-          var footerText = $("<h6 class='text-muted small'></h6>").text("Rating: " + rating );
+          var footerText = $("<p class='text-muted'></p>").text("Rating: " + rating );
           col1.append(footerText);
           rowFooter.append(col1);
           
           
           var a1 = $("<a>");
           a1.attr("href", "#");
-          var fav = $('<i class="far fa-heart"></i>');
+          var fav = $('<i class="far fa-heart" id="heart"></i>');
           a1.append(fav);
           col2.append(a1);
           rowFooter.append(col2);
@@ -60,7 +69,7 @@ function runQuery(queryURL) {
 
           var a2 = $("<a>");
           a2.attr("href", "#");
-          var share = $('<i class="far fa-share-square"></i>');
+          var share = $('<i class="far fa-share-square" id="share"></i>');
           a2.append(share);
           col3.append(a2);
           rowFooter.append(col3);
@@ -68,6 +77,7 @@ function runQuery(queryURL) {
           footer.append(rowFooter);
   
           animalImage.addClass("img-fluid");
+          animalImage.attr("data-name", title);
           var still_image = results[i].images.fixed_height_still.url;
           animalImage.attr("src", still_image);
           
@@ -94,7 +104,7 @@ function runQuery(queryURL) {
 $(document).ready(function(){
    
       displayButtons();
-   
+      createFavButton();
 
     $("button").on("click", ".animal-btn", function() {
 
@@ -116,6 +126,11 @@ $(document).ready(function(){
       createButton(animal);  
       $("#animalInput").val("");
     });
+
+    $("a").on("click", "#heart", function(){
+      
+    });
+
 
      
 });
