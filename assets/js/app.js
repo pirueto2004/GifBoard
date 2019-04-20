@@ -4,6 +4,8 @@ var topics = ["dog", "cat", "rabbit", "hamster", "goldfish", "bird", "turtle", "
 
 var favorites =[];
 var favCounter = 0;
+var favButton;
+var animalDivs = [];
 
 var results;
 var animal;
@@ -24,10 +26,10 @@ function createButton(animal) {
 }
 
 function createFavButton() {
-  var button = $("<button>");
-  button.addClass("btn btn-lg btn-outline-primary mr-1 py-1 favorite-btn");
-  button.text("Favorites");
-  $("#fav-button").append(button);
+  favButton = $("<button>");
+  favButton.addClass("btn btn-lg btn-outline-primary mr-1 py-1 favorite-btn");
+  favButton.text("Favorites");
+  $("#fav-button").append(favButton);
 }
 
 function runQuery(queryURL) {
@@ -61,7 +63,9 @@ function runQuery(queryURL) {
           
           var a1 = $("<a>");
           a1.attr("href", "#");
-          var fav = $('<i class="far fa-heart" id="heart"></i>');
+          a1.attr("id", "favorite");
+          a1.addClass("fav-btn");
+          var fav = $('<i class="far fa-heart"></i>');
           a1.append(fav);
           col2.append(a1);
           rowFooter.append(col2);
@@ -69,7 +73,8 @@ function runQuery(queryURL) {
 
           var a2 = $("<a>");
           a2.attr("href", "#");
-          var share = $('<i class="far fa-share-square" id="share"></i>');
+          a2.attr("id", "share");
+          var share = $('<i class="far fa-share-square" ></i>');
           a2.append(share);
           col3.append(a2);
           rowFooter.append(col3);
@@ -77,7 +82,9 @@ function runQuery(queryURL) {
           footer.append(rowFooter);
   
           animalImage.addClass("img-fluid");
+          animalImage.addClass("normal");
           animalImage.attr("data-name", title);
+        
           var still_image = results[i].images.fixed_height_still.url;
           animalImage.attr("src", still_image);
           
@@ -92,6 +99,8 @@ function runQuery(queryURL) {
           animalDiv.append(cardTitle);     
           animalDiv.append(footer);
           
+          animalDivs.push(animalDiv);
+          
           col.append(animalDiv);
                        
           $("#gifs-appear-here").prepend(col);
@@ -104,6 +113,7 @@ function runQuery(queryURL) {
 $(document).ready(function(){
    
       displayButtons();
+      console.log(animalDivs);
       createFavButton();
 
     $("button").on("click", ".animal-btn", function() {
@@ -126,12 +136,6 @@ $(document).ready(function(){
       createButton(animal);  
       $("#animalInput").val("");
     });
-
-    $("a").on("click", "#heart", function(){
-      
-    });
-
-
      
 });
 
@@ -163,5 +167,23 @@ $(document).ready(function(){
          
       });
   
+      $(document.body).on("click", "a", "#favorite", function(){
+          if ($(this).hasClass("active") && $(this).hasClass("favorite")) { 
+            $(this).removeClass("active favorite");
+            $(this).addClass("normal");
+            $(this).html('<i class="far fa-heart"></i>');
+            favCounter--;
+            favButton.html('Favorites <span class="badge badge-secondary">'+ favCounter + '</span>');
+            
+          }
+          else {      
+            favCounter++;
+            $(this).removeClass("normal");
+            $(this).addClass("active favorite");
+            $(this).html('<i class="fas fa-heart"></i>');
+            favButton.html('Favorites <span class="badge badge-secondary">'+ favCounter + '</span>');
+          }  
+        
+      });
 
   
