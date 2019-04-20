@@ -33,13 +33,39 @@ function runQuery(queryURL) {
       
       for (var i = 0; i < results.length; i++) {
           var col = $("<div class='col-12 col-md-6 col-lg-3' ></div>");
-          var animalDiv = $("<div class='card mb-2 shadow p-0 border-0' style='height:350px;'></div>");
-          var animalImage = $("<img >").addClass("gif m-0");
+          var animalDiv = $("<div class='card mb-2 shadow p-0 border-0 text-center' style='height:350px;'></div>");
+          var animalImage = $("<img>").addClass("card-img-top gif m-0");
           var cardBody = $("<div class='card-body py-0 align-text-bottom'></div>");
           var title = results[i].title; 
-          var cardTitle = $("<div class='card-header text-normal bg-white text-uppercase'></div>").text(title);
+          var cardTitle = $("<h6 class='card-title bg-white text-capitalize'></h6>").text(title);
           var rating = results[i].rating;
-          var rate = $("<div class='card-footer h6 bg-white text-muted small mb-0'></div>").text("Rating: " + rating );
+          var footer = $("<div class='card-footer bg-white text-muted small mb-0'></div>");
+          var rowFooter = $("<div class='row'></div>");
+          var col1 = $("<div class='col-md-4'></div>");
+          var col2 = $("<div class='col-md-4'></div>");
+          var col3 = $("<div class='col-md-4'></div>");
+
+          var footerText = $("<h6 class='text-muted small'></h6>").text("Rating: " + rating );
+          col1.append(footerText);
+          rowFooter.append(col1);
+          
+          
+          var a1 = $("<a>");
+          a1.attr("href", "#");
+          var fav = $('<i class="far fa-heart"></i>');
+          a1.append(fav);
+          col2.append(a1);
+          rowFooter.append(col2);
+
+
+          var a2 = $("<a>");
+          a2.attr("href", "#");
+          var share = $('<i class="far fa-share-square"></i>');
+          a2.append(share);
+          col3.append(a2);
+          rowFooter.append(col3);
+          
+          footer.append(rowFooter);
   
           animalImage.addClass("img-fluid");
           var still_image = results[i].images.fixed_height_still.url;
@@ -54,7 +80,7 @@ function runQuery(queryURL) {
           animalDiv.append(animalImage);
           animalDiv.append(cardBody);
           animalDiv.append(cardTitle);     
-          animalDiv.append(rate);
+          animalDiv.append(footer);
           
           col.append(animalDiv);
                        
