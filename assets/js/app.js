@@ -1,7 +1,10 @@
+//Create array for the animals of my choice
 var topics = ["dog", "cat", "rabbit", "hamster", "goldfish", "bird", "turtle", "chicken", 
             "frog", "salamander", "crab", "chinchilla", "alligator", "snake", "falcon", 
             "eagle", "crocodile", "cow", "horse", "lion", "panther", "dolphin", "jaguar"];
 
+//GLOBAL VARIABLES
+//------------------------
 var favorites =[];
 var favCounter = 0;
 var favButton;
@@ -10,7 +13,11 @@ var animalDivs = [];
 var results;
 var animal;
 var queryURL;
+var id;
 
+
+//FUNCTIONS
+//------------------------
 function displayButtons() {   
     for (var i = 0; i < topics.length; i++) {
         animal = topics[i]; 
@@ -30,6 +37,12 @@ function createFavButton() {
   favButton.addClass("btn btn-lg btn-outline-primary mr-1 py-1 favorite-btn");
   favButton.text("Favorites");
   $("#fav-button").append(favButton);
+}
+
+//Returns the id of the element with class "gif"
+function getId(el) {
+  id = el.parents().find(".gif").attr("id");
+  return id;
 }
 
 function runQuery(queryURL) {
@@ -83,6 +96,7 @@ function runQuery(queryURL) {
   
           animalImage.addClass("img-fluid");
           animalImage.addClass("normal");
+          animalImage.attr("id", "item-"+ i );
           animalImage.attr("data-name", title);
         
           var still_image = results[i].images.fixed_height_still.url;
@@ -109,7 +123,8 @@ function runQuery(queryURL) {
   });
 
 }
- 
+
+//
 $(document).ready(function(){
    
       displayButtons();
@@ -167,20 +182,27 @@ $(document).ready(function(){
          
       });
   
+      
       $(document.body).on("click", "a", "#favorite", function(){
-          if ($(this).hasClass("active") && $(this).hasClass("favorite")) { 
-            $(this).removeClass("active favorite");
-            $(this).addClass("normal");
-            $(this).html('<i class="far fa-heart"></i>');
+        var elem = $(this);
+        console.log(getId(elem));  
+        if (elem.hasClass("active") && elem.hasClass("favorite")) { 
+            elem.removeClass("active favorite");
+            elem.addClass("normal");
+            elem.html('<i class="far fa-heart"></i>');
             favCounter--;
-            favButton.html('Favorites <span class="badge badge-secondary">'+ favCounter + '</span>');
-            
+                if (favCounter < 1) {
+                  favButton.text("Favorites");
+                }
+                else {
+                  favButton.html('Favorites <span class="badge badge-secondary">'+ favCounter + '</span>');
+                } 
           }
           else {      
             favCounter++;
-            $(this).removeClass("normal");
-            $(this).addClass("active favorite");
-            $(this).html('<i class="fas fa-heart"></i>');
+            elem.removeClass("normal");
+            elem.addClass("active favorite");
+            elem.html('<i class="fas fa-heart"></i>');
             favButton.html('Favorites <span class="badge badge-secondary">'+ favCounter + '</span>');
           }  
         
