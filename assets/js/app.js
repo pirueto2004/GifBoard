@@ -23,6 +23,7 @@ var cardBody;
 var cardTitle;
 var cardFooter;
 var imageSrc;
+var imageAnimate;
 var cardPos;
 
 //FUNCTIONS
@@ -54,7 +55,7 @@ function createFavButton() {
 //   return id;
 // }
 
-function buildNewCard(imageSrc, title, rating) {
+function buildNewCard(imageSrc, title, rating, still_img, animate_img) {
   // //Create column for the card
   // var col = $("<div class='col-12 col-md-6 col-lg-4 py-2' ></div>");
 
@@ -64,19 +65,29 @@ function buildNewCard(imageSrc, title, rating) {
    //Add image to card
    cardImage = $("<img>").addClass("card-img-top gif m-0");
 
-   cardImage.attr("src", imageSrc);
+    //Adding classes and attributes to the image
+    cardImage.addClass("img-fluid");
+    cardImage.removeClass("normal");
+    cardImage.addClass("favorite");
+    // cardImage.attr("id", "item-"+ i );
+    cardImage.attr("data-name", title); 
+    cardImage.attr("data-rating", rating);      
+    cardImage.attr("src", still_img);
+    cardImage.attr("data-animate", animate_img);
+    cardImage.attr("data-still", still_img);
+    cardImage.attr("data-state", "still"); 
 
-   cardDiv.append(cardImage);
+  //  cardDiv.append(cardImage);
 
    //Card body wrapper
    cardBody = $("<div class='card-body py-0 align-text-bottom'></div>");
 
-   cardDiv.append(cardBody);
+  //  cardDiv.append(cardBody);
    
    //Title 
    cardTitle = $("<h6 class='card-title bg-white text-capitalize'></h6>").text(title);
 
-   cardDiv.append(cardTitle);
+  //  cardDiv.append(cardTitle);
    
   
    //Card footer with 3 columns 
@@ -116,7 +127,13 @@ function buildNewCard(imageSrc, title, rating) {
    //Appending the row with the three columns to the footer
    cardFooter.append(rowFooter);
 
-   cardDiv.append(rowFooter);
+  //  cardDiv.append(rowFooter);
+
+   //Building the card element by appending the image on top, then the card-body, card-title, and the card-footer
+   cardDiv.append(cardImage);
+   cardDiv.append(cardBody);
+   cardDiv.append(cardTitle);     
+   cardDiv.append(cardFooter);
 
    return cardDiv;
  
@@ -186,20 +203,9 @@ function buildCard(i, title, rating, still_image, animate_image) {
   animalImage.attr("data-still", still_image);
   animalImage.attr("data-state", "still");   
 
-  //Building the card element by appending the image on top, then the card-body, card-title, and the card-footer
-  // animalDiv.append(animalImage);
-  // animalDiv.append(cardBody);
-  // animalDiv.append(cardTitle);     
-  // animalDiv.append(cardFooter);
-     animalDiv.attr("pos", cardPos);
-  // //Pushing each card element to the array of animalDivs
-  // animalDivs.push(animalDiv);
-  
-  // //Appending the card to the column
-  // col.append(animalDiv);
-  
-  // //Adding the column before the existing ones
-  // $("#gifs-appear-here").prepend(col);
+  //Save the position of this card on the layout
+  animalDiv.attr("pos", cardPos);
+ 
 }
 
 function runQuery(queryURL) {
@@ -285,6 +291,24 @@ $(document).ready(function(){
       // var card = buildNewCard(imageSrc, title, rating);  
       
     });
+
+    $("img").on("click", ".favorite", function(){
+    
+      state = $(this).attr("data-state");
+  
+      alert("This image is  " + $(this).attr("data-state"));
+  
+      if (state === "still") {
+          $(this).attr("src", $(this).attr("data-animate"));
+          $(this).attr("data-state", "animate");
+        
+      }
+        else {
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
+      }
+   
+  });
      
 });
 
@@ -305,6 +329,25 @@ $(document).ready(function(){
         }
      
   });
+
+//   $(document.body).on("click", "img", ".favorite", function(){
+    
+//     state = $(this).attr("data-state");
+
+//     alert("This image is  " + $(this).attr("data-state"));
+
+//     if (state === "still") {
+//         $(this).attr("src", $(this).attr("data-animate"));
+//         $(this).attr("data-state", "animate");
+      
+//     }
+//       else {
+//         $(this).attr("src", $(this).attr("data-still"));
+//         $(this).attr("data-state", "still");
+//     }
+ 
+// });
+
 
   $(document.body).on("click", ".animal-btn", function(){
 
@@ -342,9 +385,11 @@ $(document).ready(function(){
         // Get the id of the current animal image
         var id = $(animalDivs[pos][0]).find("img").attr("id");
         imageSrc = $(animalDivs[pos][0]).find("img").attr("src");  
+        animate_image = $(animalDivs[pos][0]).find("img").attr("data-animate"); 
+        still_image = $(animalDivs[pos][0]).find("img").attr("data-still");
         title = $(animalDivs[pos][0]).find("img").attr("data-name");
         rating = $(animalDivs[pos][0]).find("img").attr("data-rating");
-        var card = buildNewCard(imageSrc, title, rating);
+        var card = buildNewCard(imageSrc, title, rating, still_image, animate_image);
         favorites.push(card);
         console.log(favorites);
       }  
